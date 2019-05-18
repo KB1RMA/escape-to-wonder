@@ -44,6 +44,19 @@ class MyApp extends App {
             {/* Pass pageContext to the _document though the renderPage enhancer
                 to render collected styles on server-side. */}
             <Component pageContext={this.pageContext} {...pageProps} />
+            <style jsx global>
+              {`
+                html,
+                body {
+                  min-height: 100%;
+                  height: 100%;
+                }
+
+                #__next {
+                  height: 100%;
+                }
+              `}
+            </style>
           </MuiThemeProvider>
         </JssProvider>
       </Container>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Document, { Head, Main, NextScript } from 'next/document';
 import flush from 'styled-jsx/server';
 
-class MyDocument extends Document {
+class EscapeToWonderDoc extends Document {
   render() {
     const { pageContext } = this.props;
 
@@ -37,7 +37,7 @@ class MyDocument extends Document {
   }
 }
 
-MyDocument.getInitialProps = ctx => {
+EscapeToWonderDoc.getInitialProps = ctx => {
   // Resolution order
   //
   // On the server:
@@ -100,4 +100,4 @@ MyDocument.getInitialProps = ctx => {
   };
 };
 
-export default MyDocument;
+export default EscapeToWonderDoc;

@@ -1,7 +1,6 @@
 extends: airbnb
 
 plugins:
-  - react
   - react-hooks
   - jsx-a11y
   - import
@@ -9,7 +8,10 @@ plugins:
 
 rules:
   react/jsx-filename-extension: 0
+  react/jsx-one-expression-per-line: 0
+  react/require-default-props: 0
   react-hooks/rules-of-hooks: error
   react-hooks/exhaustive-deps: warn
   prettier/prettier: error
   arrow-parens: 0
+  object-curly-newline: 0
