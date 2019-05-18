@@ -8,6 +8,8 @@ plugins:
   - prettier
 
 rules:
+  react/jsx-filename-extension: 0
   react-hooks/rules-of-hooks: error
   react-hooks/exhaustive-deps: warn
   prettier/prettier: error
+  arrow-parens: 0
