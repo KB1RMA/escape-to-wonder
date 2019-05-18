@@ -3,7 +3,7 @@ import { arrayOf, shape, func, string, number } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/lab/Slider';
 
-const ImageController = ({ dispatch, images }) => (
+const SliderController = ({ dispatch, images }) => (
   <div className="image-controller-contain">
     {images.map((image, i) => (
       <Fragment key={`image-control-${image.src}`}>
@@ -36,7 +36,7 @@ const ImageController = ({ dispatch, images }) => (
   </div>
 );
 
-ImageController.propTypes = {
+SliderController.propTypes = {
   dispatch: func,
   images: arrayOf(
     shape({
@@ -46,4 +46,4 @@ ImageController.propTypes = {
   ),
 };
 
-export default ImageController;
+export default SliderController;

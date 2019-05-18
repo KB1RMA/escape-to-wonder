@@ -1,6 +1,10 @@
 import React, { Fragment, useReducer } from 'react';
+import dynamic from 'next/dynamic';
 import Image from '../src/Components/Image';
-import ImageController from '../src/Components/Controller';
+
+const SliderController = dynamic(() =>
+  import('../src/Components/Controllers/Slider'),
+);
 
 const reducer = (state, action) => {
   const { images } = state;
@@ -33,10 +37,10 @@ export default () => {
   return (
     <Fragment>
       <div className="image-container">
-        {images.map(({ src, opacity }, i) => (
+        {images.map(({ src, opacity }) => (
           <Image key={`image-${src}`} src={src} opacity={opacity} />
         ))}
-        <ImageController images={images} dispatch={dispatch} />
+        <SliderController images={images} dispatch={dispatch} />
         <style jsx>
           {`
             .image-container {

@@ -29,7 +29,7 @@ const Image = ({ opacity = 100, src = '' }) => {
 
 Image.propTypes = {
   opacity: (props, propName) => {
-    const val = props[propName];
+    const val = props[propName]; // eslint-disable-line
 
     if (val > 100 || val < 0) {
       return new Error('Opacity must be between 0 and 100');
