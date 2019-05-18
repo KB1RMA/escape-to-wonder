@@ -1,8 +1,8 @@
-import React, { useMemo, useEffect } from 'react';
-import cx from 'classnames';
+/* global window */
+import React, { useMemo, useEffect, useCallback } from 'react';
 import ReactCursorPosition from 'react-cursor-position';
 
-const ListenerWrapper = ({ imageIndex, dispatch }) => {
+const ListenerWrapper = ({ dispatch }) => {
   const Listener = ({
     isActive,
     position: { x, y },
@@ -23,8 +23,9 @@ const ListenerWrapper = ({ imageIndex, dispatch }) => {
       y,
     ]);
 
-    // Opacity on second image is on a plane 90 degrees across the square. So calculate
-    //   distance from the top-left of the rectance to the cursor.
+    // Opacity on second image is a percentage of the distance traveled across a
+    //   plane 90 degrees diagonal inside the square. So calculate the cursor's
+    //   distance from the top-left of the rectangle to the bottom-right.
     const opacity1 = useMemo(() => {
       const a = 0 - x;
       const b = 0 - y;
@@ -34,8 +35,9 @@ const ListenerWrapper = ({ imageIndex, dispatch }) => {
       return ((diagonalPos / diagonalWidthContainer) * 100).toFixed(1);
     }, [x, y, diagonalWidthContainer]);
 
-    // Opacity on third image is on a plane -90 degrees across the square. So calculate
-    //   distance from the top-right of the rectangle to the cursor.
+    // Opacity on third image is a percentage of the distance traveled across a
+    //   plane -90 degrees diagonal of the square. So calculate the cursor's
+    //   distance from the top-right of the rectangle to the bottom-left.
     const opacity2 = useMemo(() => {
       const a = width - x;
       const b = height - y;
@@ -45,52 +47,32 @@ const ListenerWrapper = ({ imageIndex, dispatch }) => {
       return ((diagonalPos / diagonalWidthContainer) * 100).toFixed(1);
     }, [x, y, diagonalWidthContainer, width, height]);
 
-    // Change index 0 image
+    // Store a memoized callback to send to requestAnimationFrame
+    const dispatchImageUpdates = useCallback(() => {
+      dispatch({
+        type: 'batch_update_opacity',
+        imagesToUpdate: [
+          { index: 0, opacity: opacity0 },
+          { index: 1, opacity: opacity1 },
+          { index: 2, opacity: opacity2 },
+        ],
+      });
+    }, [opacity0, opacity1, opacity2]);
+
+    // Trigger a rerender of the images with their new opacities in the DOM
     useEffect(() => {
       if (!isActive) return undefined;
 
-      dispatch({
-        type: 'opacity',
-        index: 0,
-        opacity: opacity0,
-      });
+      window.requestAnimationFrame(dispatchImageUpdates);
 
       return undefined;
-    }, [isActive, opacity0]);
-
-    // Change index 1 image
-    useEffect(() => {
-      if (!isActive) return undefined;
-
-      dispatch({
-        type: 'opacity',
-        index: 1,
-        opacity: opacity1,
-      });
-
-      return undefined;
-    }, [isActive, opacity1]);
-
-    // Change index 2 image
-    useEffect(() => {
-      if (!isActive) return undefined;
-
-      dispatch({
-        type: 'opacity',
-        index: 2,
-        opacity: opacity2,
-      });
-
-      return undefined;
-    }, [isActive, opacity2]);
+    }, [dispatchImageUpdates, isActive, opacity0, opacity1, opacity2]);
 
     return null;
   };
 
   return (
-    <ReactCursorPosition
-      className={cx('position-listener', `position-key--${imageIndex}`)}
-    >
+    <ReactCursorPosition className="position-listener">
       <Listener />
     </ReactCursorPosition>
   );
@@ -98,7 +80,7 @@ const ListenerWrapper = ({ imageIndex, dispatch }) => {
 
 const TriangularController = ({ images, dispatch }) => (
   <div className="triangular-controller-wrapper">
-    <ListenerWrapper imageIndex={0} dispatch={dispatch} />
+    <ListenerWrapper dispatch={dispatch} />
     <style jsx>
       {`
         .triangular-controller-wrapper {

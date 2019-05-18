@@ -20,6 +20,15 @@ const reducer = (state, action) => {
         ...state,
         images,
       };
+    case 'batch_update_opacity':
+      action.imagesToUpdate.map(update => {
+        images[update.index].opacity = update.opacity;
+      });
+
+      return {
+        ...state,
+        images,
+      };
     default:
       throw new Error('Invalid action type');
   }
