@@ -1,4 +1,7 @@
+const env = require('./env-config');
+
 module.exports = {
+  plugins: [['transform-define', env]],
   presets: [
     [
       'next/babel',

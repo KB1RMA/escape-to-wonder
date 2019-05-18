@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
-import { arrayOf, shape, func, string } from 'prop-types';
+import { arrayOf, shape, func, string, number } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/lab/Slider';
 
 const ImageController = ({ dispatch, images }) => (
   <div className="image-controller-contain">
     {images.map((image, i) => (
-      <Fragment>
+      <Fragment key={`image-control-${image.src}`}>
         <div className="image">
           <Typography id="label">Opacity: {image.src} </Typography>
           <Slider
@@ -41,7 +41,7 @@ ImageController.propTypes = {
   images: arrayOf(
     shape({
       src: string,
-      opacity: string,
+      opacity: number,
     }),
   ),
 };

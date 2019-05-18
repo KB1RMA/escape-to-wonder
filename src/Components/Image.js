@@ -5,7 +5,12 @@ const Image = ({ opacity = 100, src = '' }) => {
   const styleOpacity = opacity / 100;
   return (
     <Fragment>
-      <div style={{ opacity: styleOpacity, backgroundImage: `url(${src})` }} />
+      <div
+        style={{
+          opacity: styleOpacity,
+          backgroundImage: `url(${process.env.BACKEND_URL}${src})`,
+        }}
+      />
       <style jsx>
         {`
           div {
