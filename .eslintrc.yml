@@ -1,5 +1,7 @@
 extends: airbnb
 
+parser: babel-eslint
+
 plugins:
   - react-hooks
   - jsx-a11y
@@ -14,4 +16,6 @@ rules:
   react-hooks/exhaustive-deps: warn
   prettier/prettier: error
   arrow-parens: 0
+  function-paren-newline: 0
   object-curly-newline: 0
+  implicit-arrow-linebreak: 0
