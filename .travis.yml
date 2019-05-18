@@ -1,1 +1,6 @@
 language: node_js
+
+script:
+  - NODE_ENV=production
+  - npm run build
+  - npm run export
