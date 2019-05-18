@@ -8,7 +8,7 @@ const SliderController = ({ dispatch, images }) => (
     {images.map((image, i) => (
       <Fragment key={`image-control-${image.src}`}>
         <div className="image">
-          <Typography id="label">Opacity: {image.src} </Typography>
+          <Typography>Opacity: {image.src} </Typography>
           <Slider
             value={image.opacity}
             onChange={(e, val) => {

@@ -5,6 +5,9 @@ import Image from '../src/Components/Image';
 const SliderController = dynamic(() =>
   import('../src/Components/Controllers/Slider'),
 );
+const TriangularController = dynamic(() =>
+  import('../src/Components/Controllers/Triangular'),
+);
 
 const reducer = (state, action) => {
   const { images } = state;
@@ -41,12 +44,14 @@ export default () => {
           <Image key={`image-${src}`} src={src} opacity={opacity} />
         ))}
         <SliderController images={images} dispatch={dispatch} />
+        <TriangularController images={images} dispatch={dispatch} />
         <style jsx>
           {`
             .image-container {
               width: 100%;
               height: 100%;
               position: relative;
+              overflow: hidden;
             }
           `}
         </style>
