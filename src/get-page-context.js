@@ -1,8 +1,6 @@
 import { SheetsRegistry } from 'jss';
-import {
-  createMuiTheme,
-  createGenerateClassName,
-} from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { createGenerateClassName } from '@material-ui/styles';
 
 const theme = createMuiTheme();
 
