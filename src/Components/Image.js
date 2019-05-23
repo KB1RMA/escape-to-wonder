@@ -20,6 +20,10 @@ const Image = ({ opacity = 100, src = '' }) => {
             height: 100%;
             width: 100%;
             background-size: cover;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            perspective: 1000;
+            will-change: opacity;
           }
         `}
       </style>
