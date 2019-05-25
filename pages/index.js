@@ -1,6 +1,8 @@
-import React, { Fragment, useReducer } from 'react';
+import React, { Fragment, useReducer, useContext } from 'react';
 import dynamic from 'next/dynamic';
+import { ImageContext } from '../src/Context/ImageContext';
 import Image from '../src/Components/Image';
+import ImageSettings from '../src/Components/Controllers/ImageSettings';
 
 const SliderController = dynamic(() =>
   import('../src/Components/Controllers/Slider'),
@@ -35,25 +37,22 @@ const reducer = (state, action) => {
 };
 
 export default () => {
-  const initialState = {
-    images: [
-      { src: '/static/images/one.jpg', opacity: 50 },
-      { src: '/static/images/two.jpg', opacity: 50 },
-      { src: '/static/images/three.jpg', opacity: 50 },
-    ],
-  };
+  const { images } = useContext(ImageContext);
+
+  const initialState = { images };
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { images } = state;
+  const { images: currentImages } = state;
 
   return (
     <Fragment>
       <div className="image-container">
-        {images.map(({ src, opacity }) => (
+        {currentImages.map(({ src, opacity }) => (
           <Image key={`image-${src}`} src={src} opacity={opacity} />
         ))}
-        <SliderController images={images} dispatch={dispatch} />
-        <TriangularController images={images} dispatch={dispatch} />
+        <SliderController images={currentImages} dispatch={dispatch} />
+        <TriangularController images={currentImages} dispatch={dispatch} />
+        {/* <ImageSettings /> */}
         <style jsx>
           {`
             .image-container {

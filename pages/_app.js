@@ -6,6 +6,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import JssProvider from 'react-jss/lib/JssProvider';
 import getPageContext from '../src/get-page-context';
+import { ImageContextProvider } from '../src/Context/ImageContext';
 
 class MyApp extends App {
   constructor() {
@@ -43,7 +44,9 @@ class MyApp extends App {
             <CssBaseline />
             {/* Pass pageContext to the _document though the renderPage enhancer
                 to render collected styles on server-side. */}
-            <Component pageContext={this.pageContext} {...pageProps} />
+            <ImageContextProvider>
+              <Component pageContext={this.pageContext} {...pageProps} />
+            </ImageContextProvider>
             <style jsx global>
               {`
                 html,
