@@ -1,4 +1,5 @@
 /* global window */
+/* eslint-disable operator-linebreak */
 import React, { useMemo, useEffect, useCallback } from 'react';
 import ReactCursorPosition from 'react-cursor-position';
 
@@ -8,6 +9,7 @@ const ListenerWrapper = ({ dispatch }) => {
     position: { x, y },
     elementDimensions: { height, width },
   }) => {
+    console.log(x, y, width, height);
     const diagonalWidthContainer = useMemo(() => {
       const a = 0 - width;
       const b = 0 - height;
@@ -17,8 +19,9 @@ const ListenerWrapper = ({ dispatch }) => {
     }, [height, width]);
 
     // Opacity on first image is determined by plane of 0degrees (up and down, so we
-    //   can just figure out) the percentage y is of the height.
-    const opacity0 = useMemo(() => ((y / height) * 100).toFixed(1), [
+    //  determine the percentage based on how far the cursor is from the _bottom_ of the
+    //  rectangle to the top.
+    const opacity0 = useMemo(() => (((height - y) / height) * 100).toFixed(1), [
       height,
       y,
     ]);
@@ -27,25 +30,31 @@ const ListenerWrapper = ({ dispatch }) => {
     //   plane 90 degrees diagonal inside the square. So calculate the cursor's
     //   distance from the top-left of the rectangle to the bottom-right.
     const opacity1 = useMemo(() => {
-      const a = 0 - x;
-      const b = 0 - y;
-      const diagonalPos = Math.sqrt(a * a + b * b).toFixed(1);
-
-      // What percentage of the total distance is the current position?
-      return ((diagonalPos / diagonalWidthContainer) * 100).toFixed(1);
-    }, [x, y, diagonalWidthContainer]);
-
-    // Opacity on third image is a percentage of the distance traveled across a
-    //   plane -90 degrees diagonal of the square. So calculate the cursor's
-    //   distance from the top-right of the rectangle to the bottom-left.
-    const opacity2 = useMemo(() => {
       const a = width - x;
       const b = height - y;
       const diagonalPos = Math.sqrt(a * a + b * b).toFixed(1);
 
       // What percentage of the total distance is the current position?
-      return ((diagonalPos / diagonalWidthContainer) * 100).toFixed(1);
-    }, [x, y, diagonalWidthContainer, width, height]);
+      return (
+        ((diagonalWidthContainer - diagonalPos) / diagonalWidthContainer) *
+        100
+      ).toFixed(1);
+    }, [width, x, height, y, diagonalWidthContainer]);
+
+    // Opacity on third image is a percentage of the distance traveled across a
+    //   plane -90 degrees diagonal of the square. So calculate the cursor's
+    //   distance from the top-right of the rectangle to the bottom-left.
+    const opacity2 = useMemo(() => {
+      const a = height - y;
+      const b = 0 - x;
+      const diagonalPos = Math.sqrt(a * a + b * b).toFixed(1);
+
+      // What percentage of the total distance is the current position?
+      return (
+        ((diagonalWidthContainer - diagonalPos) / diagonalWidthContainer) *
+        100
+      ).toFixed(1);
+    }, [x, y, height, diagonalWidthContainer]);
 
     // Store a memoized callback to send to requestAnimationFrame
     const dispatchImageUpdates = useCallback(() => {
@@ -80,7 +89,11 @@ const ListenerWrapper = ({ dispatch }) => {
 
 const TriangularController = ({ images, dispatch }) => (
   <div className="triangular-controller-wrapper">
+    <div className="triangle-display" />
     <ListenerWrapper dispatch={dispatch} />
+    {images.map((image, i) => (
+      <div className={`opacity-of opacity-of-${i}`}>{image.opacity}%</div>
+    ))}
     <style jsx>
       {`
         .triangular-controller-wrapper {
@@ -96,9 +109,36 @@ const TriangularController = ({ images, dispatch }) => (
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 75%;
-            height: 75%;
-            border: solid 1px #000;
+            width: 100%;
+            height: 100%;
+            border: solid 1px rgba(0, 0, 0, 0.2);
+          }
+
+          .triangle-display {
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+
+            clip-path: polygon(50% 0, 0 100%, 100% 100%);
+          }
+
+          .opacity-of {
+            position: absolute;
+            color: #fff;
+
+            &-0 {
+              left: 50%;
+              top: -30px;
+              transform: translateX(-50%);
+            }
+
+            &-1 {
+              right: -40px;
+              bottom: -30px;
+              transform: translateX(-50%);
+            }
           }
         }
       `}

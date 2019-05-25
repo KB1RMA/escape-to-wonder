@@ -50,7 +50,7 @@ export default () => {
         {currentImages.map(({ src, opacity }) => (
           <Image key={`image-${src}`} src={src} opacity={opacity} />
         ))}
-        <SliderController images={currentImages} dispatch={dispatch} />
+        {/* <SliderController images={currentImages} dispatch={dispatch} /> */}
         <TriangularController images={currentImages} dispatch={dispatch} />
         {/* <ImageSettings /> */}
         <style jsx>
